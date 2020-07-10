@@ -1,9 +1,0 @@
-language: python
-install:
-  - pip install tox
-script:
-    - tox -- --ro-functional
-notifications:
-    email: true
-    on_success: never
-    on_failure: always
