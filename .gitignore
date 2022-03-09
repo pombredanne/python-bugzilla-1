@@ -3,8 +3,7 @@
 MANIFEST
 dist
 build
+.cache
 .coverage
 .tox
-
-#python-bugzilla venvs
-dev-env*
+.pytest_cache

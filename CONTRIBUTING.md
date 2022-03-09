@@ -6,39 +6,36 @@ dependencies, running the command line from git is as simple as doing:
     cd python-bugzilla.git
     ./bugzilla-cli [arguments]
 
-If you want to use pip and virtualenv to install a local development
-environment, use the following command.
-
-    source contrib/activate-dev-env [python2|python3]
-
-Then you can manually activate an environment with:
-
-    source dev-env-${NAME}/bin/activate
-
 
 # Running tests
 
-Once you have already activated an environment, you can use the following.
+Our test suite uses pytest. If your system has dependencies already, the
+quick unit test suite is invoked simply with:
 
-## Basic unit test suite
-
-    python setup.py test
+    pytest
 
 ## Read-Only Functional tests
-There are more comprehensive tests that are disabled by default. Readonly
-functional tests that run against several public bugzilla instances. No
-login account is required:
 
-    python setup.py test --ro-functional
+There are more comprehensive, readonly functional tests that run against
+several public bugzilla instances, but they are not run by default. No
+login account is required. Run them with:
+
+     pytest --ro-functional
 
 ## Read/Write Functional Tests.
 
-Before running rw-functional tests, make sure you have logged into bugzilla
-using. These currently run against the test bugzilla instance at
-partner-bugzilla.redhat.com, and requires a valid login there:
+Read/Write functional tests use bugzilla.stage.redhat.com, which is a
+bugzilla instance specifically for this type of testing. Data is occasionally
+hard synced with regular bugzilla.redhat.com, and all local edits are
+removed. Login accounts are also synced. If you want access to
+bugzilla.stage.redhat.com, sign up for a regular bugzilla.redhat.com login
+and wait for the next sync period.
 
-    bugzilla-cli --bugzilla=partner-bugzilla.redhat.com --user=$USER login
-    python setup.py test --rw-functional
+Before running these tests, you'll need to cache login credentials.
+Example:
+
+    ./bugzilla-cli --bugzilla=bugzilla.stage.redhat.com --username=$USER login
+    pytest --rw-functional
 
 ## Testing across python versions
 To test all supported python versions, run tox using any of the following.
@@ -48,30 +45,21 @@ To test all supported python versions, run tox using any of the following.
     tox -- --rw-functional
 
 
-# pylint and pep8
+# pylint and pycodestyle
 
-To test for pylint or pep8 violations, you can run:
+To test for pylint or pycodestyle violations, you can run:
 
-    python setup.py pylint
+    ./setup.py pylint
 
-Note: This expects that you already have pylint and pep8 (installed when setting
-up virtualenv) installed.
+Note: This expects that you already have pylint and pycodestyle installed.
 
 
 # Patch Submission
 
 If you are submitting a patch, ensure the following:
-    [REQ] verify that no new pylint or pep8 violations
+    [REQ] verify that no new pylint or pycodestyle violations
     [REQ] run basic unit test suite across all python versions as described
         above.
 
 Running any of the functional tests is not a requirement for patch submission,
 but please give them a go if you are interested.
-
-Patches can be submitted via github pull-request, or via the mailing list
-at python-bugzilla@lists.fedorahosted.org using 'git send-email'.
-
-
-# Bug reports
-
-Bug reports should be submitted as github issues, or sent to the mailing list
